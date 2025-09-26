@@ -29,20 +29,24 @@ Portal de Capacitaciones es una aplicación **Fullstack** que permite gestionar 
 
 ---
 
-## 🗂️ Estructura del proyecto
+## 🏗️ Estructura del Proyecto
 
+El proyecto sigue una arquitectura monorepo, separando el frontend y el backend para facilitar el desarrollo.
+
+```bash
 portal-capacitaciones/
-│
-├── backend/ # Aplicación Spring Boot (API REST + persistencia en base de datos)
-│ ├── src/...
-│ └── pom.xml
-│
-├── frontend/ # Aplicación Angular (interfaz de usuario)
-│ ├── src/...
-│ └── package.json
-│
-└── README.md
-
+├── backend/          # Directorio principal de la API REST (Spring Boot)
+│   ├── src/          # Código fuente de la aplicación (Java)
+│   ├── build/        # Directorio de artefactos (p.ej., .jar)
+│   └── pom.xml       # Archivo de configuración de dependencias y build (Maven)
+|
+├── frontend/         # Directorio principal de la Interfaz de Usuario (Angular)
+│   ├── src/          # Código fuente de la aplicación (TypeScript)
+│   ├── node_modules/ # Dependencias de Node.js
+│   └── package.json  # Archivo de configuración de dependencias y scripts
+|
+└── README.md         # Documentación principal del proyecto
+```
 
 ---
 
