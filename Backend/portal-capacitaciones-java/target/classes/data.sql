@@ -2,7 +2,7 @@
 -- Usuarios
 INSERT INTO users (username, password, is_admin) VALUES ('alice','password123', false);
 INSERT INTO users (username, password, is_admin) VALUES ('bob','password123', false);
-INSERT INTO users (username, password, is_admin) VALUES ('admin','admin123', true);
+INSERT INTO users (username, password, is_admin) VALUES ('admin','maycol123', true);
 
 -- Cursos
 INSERT INTO courses (title, module, description) VALUES ('Intro Fullstack', 'Fullstack', 'Fundamentos de Fullstack');

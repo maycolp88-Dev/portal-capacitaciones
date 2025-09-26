@@ -1,4 +1,4 @@
-package com.portal.service;
+package com.portal.service.impl;
 
 import com.portal.DTO.CourseDTO;
 import com.portal.DTO.ModuleDTO;
@@ -10,31 +10,34 @@ import com.portal.repository.BadgeRepository;
 import com.portal.repository.CourseRepository;
 import com.portal.repository.ModuleRepository;
 import com.portal.repository.ProgressRepository;
+import com.portal.service.ICourseService;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.*;
 
+/**
+ * Implementación de {@link ICourseService}.
+ * Contiene la lógica de negocio para cursos, módulos, progreso y badges.
+ */
 @Service
-public class CourseService {
+public class CourseServiceImpl implements ICourseService {
     private final CourseRepository courseRepo;
     private final ProgressRepository progressRepo;
     private final BadgeRepository badgeRepo;
     private final ModuleRepository moduleRepo;
 
-    public CourseService(CourseRepository courseRepo,
-                         ProgressRepository progressRepo,
-                         BadgeRepository badgeRepo,
-                         ModuleRepository moduleRepository) {
+    public CourseServiceImpl(CourseRepository courseRepo,
+                             ProgressRepository progressRepo,
+                             BadgeRepository badgeRepo,
+                             ModuleRepository moduleRepository) {
         this.courseRepo = courseRepo;
         this.progressRepo = progressRepo;
         this.badgeRepo = badgeRepo;
         this.moduleRepo = moduleRepository;
     }
 
-    // ========================
-    // LISTAR CURSOS CON MÓDULOS Y PROGRESO
-    // ========================
+    @Override
     public List<CourseDTO> listCoursesWithModules(Long userId) {
         List<Course> courses = courseRepo.findAllByOrderByModuleAscIdAsc();
         List<CourseDTO> dtos = new ArrayList<>();
@@ -82,20 +85,16 @@ public class CourseService {
         return dtos;
     }
 
-    // ========================
-    // INICIAR CURSO
-    // ========================
+    @Override
     public Progress startCourse(Long courseId, Long userId) {
         String now = Instant.now().toString();
 
-        // progreso del curso
         Progress courseProgress = progressRepo.findByUserIdAndCourseIdAndModuleIdIsNull(userId, courseId)
                 .orElseGet(() -> {
                     Progress p = new Progress(userId, courseId, null, "iniciado", now);
                     return progressRepo.save(p);
                 });
 
-        // progreso de cada módulo (si no existe -> pendiente)
         List<Module> modules = moduleRepo.findByCourseIdOrderByOrderIndex(courseId);
         for (Module m : modules) {
             progressRepo.findByUserIdAndCourseIdAndModuleId(userId, courseId, m.getId())
@@ -108,28 +107,22 @@ public class CourseService {
         return courseProgress;
     }
 
-    // ========================
-    // COMPLETAR CURSO
-    // ========================
+    @Override
     public Progress completeCourse(Long courseId, Long userId) {
         String now = Instant.now().toString();
         Progress p = new Progress(userId, courseId, "completado", now);
         progressRepo.save(p);
 
-        // crear badge
         Badge b = new Badge(null, userId, courseId, now);
         badgeRepo.save(b);
 
         return p;
     }
 
-    // ========================
-    // COMPLETAR MÓDULO
-    // ========================
+    @Override
     public Progress completeModule(Long courseId, Long moduleId, Long userId) {
         String now = Instant.now().toString();
 
-        // buscar progreso del módulo
         Progress moduleProgress = progressRepo.findByUserIdAndCourseIdAndModuleId(userId, courseId, moduleId)
                 .orElseThrow(() -> new RuntimeException("Progreso del módulo no encontrado"));
 
@@ -137,7 +130,6 @@ public class CourseService {
         moduleProgress.setUpdatedAt(now);
         progressRepo.save(moduleProgress);
 
-        // recalcular curso
         List<Module> modules = moduleRepo.findByCourseIdOrderByOrderIndex(courseId);
         long total = modules.size();
         long completed = progressRepo.findByUserId(userId).stream()
@@ -146,7 +138,6 @@ public class CourseService {
                         "completado".equals(x.getStatus()))
                 .count();
 
-        // actualizar progreso del curso
         Progress courseProgress = progressRepo.findByUserIdAndCourseIdAndModuleIdIsNull(userId, courseId)
                 .orElseThrow(() -> new RuntimeException("Progreso del curso no encontrado"));
 
@@ -154,7 +145,6 @@ public class CourseService {
             courseProgress.setStatus("completado");
             progressRepo.save(courseProgress);
 
-            // badge
             Badge b = new Badge(null, userId, courseId, now);
             badgeRepo.save(b);
         } else if (completed > 0) {
@@ -165,27 +155,36 @@ public class CourseService {
         return moduleProgress;
     }
 
-    // ========================
-    // CRUD CURSOS
-    // ========================
+    @Override
+    public Module addModule(Long courseId, Module module) {
+        Course course = courseRepo.findById(courseId)
+                .orElseThrow(() -> new RuntimeException("Curso no encontrado con id " + courseId));
+        module.setCourse(course);
+        return moduleRepo.save(module);
+    }
+
+    @Override
     public List<Course> listCourses() {
         return courseRepo.findAllByOrderByModuleAscIdAsc();
     }
 
+    @Override
     public Optional<Course> findById(Long id) {
         return courseRepo.findById(id);
     }
 
+    @Override
     public Course saveCourse(Course c) {
         return courseRepo.save(c);
     }
 
+    @Override
     public void deleteCourse(Long id) {
         courseRepo.deleteById(id);
     }
 
+    @Override
     public List<Module> getModules(Long courseId) {
         return moduleRepo.findByCourseIdOrderByOrderIndex(courseId);
     }
 }
-

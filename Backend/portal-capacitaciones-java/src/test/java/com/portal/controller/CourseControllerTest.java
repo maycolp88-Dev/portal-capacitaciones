@@ -1,7 +1,10 @@
 package com.portal.controller;
 
+import com.portal.DTO.CourseDTO;
 import com.portal.model.Course;
-import com.portal.service.CourseService;
+import com.portal.repository.ModuleRepository;
+import com.portal.repository.ProgressRepository;
+import com.portal.service.ICourseService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -15,27 +18,32 @@ import java.util.Optional;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(CourseController.class)
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 class CourseControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private CourseService courseService;
+    private ICourseService courseService;
+
+    @MockBean
+    private ModuleRepository moduleRepo;
+
+    @MockBean
+    private ProgressRepository progressRepo;
 
     @Test
     void listCourses() throws Exception {
-        List<Course> courses = List.of(
-                new Course(1L, "Curso 1", "Fullstack", "Intro a Fullstack"),
-                new Course(2L, "Curso 2", "Cloud", "Intro a Cloud")
+        List<CourseDTO> courses = List.of(
+                new CourseDTO(1L, "Curso 1", "Fullstack", "Intro a Fullstack", 0, List.of(), "iniciado"),
+                new CourseDTO(2L, "Curso 2", "Cloud", "Intro a Cloud", 0, List.of(), "iniciado")
         );
 
-        when(courseService.listCourses()).thenReturn(courses);
+        when(courseService.listCoursesWithModules(0L)).thenReturn(courses);
 
         mockMvc.perform(get("/api/courses"))
                 .andExpect(status().isOk())
@@ -54,4 +62,3 @@ class CourseControllerTest {
                 .andExpect(jsonPath("$.title").value("Curso 1"));
     }
 }
-

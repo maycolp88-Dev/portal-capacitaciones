@@ -9,6 +9,7 @@ export interface Module {
   orderIndex: number;
   courseId?: number;
   status?: string;
+  content?: string;
 }
 
 export interface Course {
@@ -66,5 +67,19 @@ export class CoursesService {
   getModuleDetail(moduleId: number): Observable<ModuleDetail> {
     return this.http.get<ModuleDetail>(`/api/modules/${moduleId}`);
   }
+
+  addModule(courseId: number, module: Partial<Module>): Observable<Module> {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    return this.http.post<Module>(
+      `/api/admin/courses/${courseId}/modules?userId=${user.id}`,
+      module
+    );
+  }
+
+  deleteModule(courseId: number, moduleId: number): Observable<void> {
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  return this.http.delete<void>(`/api/admin/courses/${courseId}/modules/${moduleId}?userId=${user.id}`);
+  }
+
 }
 

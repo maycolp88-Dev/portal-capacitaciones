@@ -1,8 +1,9 @@
 package com.portal.controller;
 
 import com.portal.model.Course;
-import com.portal.service.CourseService;
-import com.portal.service.UserService;
+import com.portal.repository.ModuleRepository;
+import com.portal.service.ICourseService;
+import com.portal.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +17,15 @@ import java.util.Map;
 public class AdminController {
 
     @Autowired
-    private CourseService courseService;
+    private ICourseService courseService;
 
     @Autowired
-    private UserService userService;
+    private IUserService userService;
 
-    // validar que el userId sea admin
+    @Autowired
+    private ModuleRepository moduleRepo;
+
+
     private boolean isAdmin(Integer userId) {
         return userService.findById(userId)
                 .map(u -> u.isAdmin())
@@ -34,6 +38,7 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(Map.of("error", "Solo administradores pueden crear cursos"));
         }
+
         return ResponseEntity.ok(courseService.saveCourse(course));
     }
 
@@ -46,4 +51,38 @@ public class AdminController {
         courseService.deleteCourse(Long.valueOf(id));
         return ResponseEntity.ok(Map.of("message", "Curso eliminado"));
     }
+
+    @PostMapping("/courses/{courseId}/modules")
+    public ResponseEntity<?> addModuleToCourse(
+            @PathVariable Long courseId,
+            @RequestBody com.portal.model.Module module,
+            @RequestParam Integer userId) {
+
+        if (!isAdmin(userId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of("error", "Solo administradores pueden agregar módulos"));
+        }
+
+        return ResponseEntity.ok(courseService.addModule(courseId, module));
+    }
+
+    @DeleteMapping("/courses/{courseId}/modules/{moduleId}")
+    public ResponseEntity<?> deleteModule(@PathVariable Long courseId,
+                                          @PathVariable Long moduleId,
+                                          @RequestParam Integer userId) {
+        if (!isAdmin(userId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of("error", "Solo administradores pueden eliminar módulos"));
+        }
+
+        moduleRepo.findById(moduleId).ifPresent(m -> {
+            if (m.getCourse().getId().equals(courseId)) {
+                moduleRepo.delete(m);
+            }
+        });
+
+        return ResponseEntity.ok(Map.of("message", "Módulo eliminado"));
+    }
+
 }
+

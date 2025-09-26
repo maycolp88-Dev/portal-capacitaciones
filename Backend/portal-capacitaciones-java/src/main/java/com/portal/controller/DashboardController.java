@@ -1,6 +1,6 @@
 package com.portal.controller;
 
-import com.portal.service.DashboardService;
+import com.portal.service.IDashboardService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,9 +12,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api")
 public class DashboardController {
-    private final DashboardService dashboardService;
+    private final IDashboardService dashboardService;
 
-    public DashboardController(DashboardService dashboardService) {
+    public DashboardController(IDashboardService dashboardService) {
         this.dashboardService = dashboardService;
     }
 

@@ -1,7 +1,7 @@
 package com.portal.controller;
 
 import com.portal.model.ModuleProgress;
-import com.portal.service.ModuleProgressService;
+import com.portal.service.IModuleProgressService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/modules")
 public class ModuleProgressController {
 
-    private final ModuleProgressService moduleProgressService;
+    private final IModuleProgressService moduleProgressService;
 
-    public ModuleProgressController(ModuleProgressService moduleProgressService) {
+    public ModuleProgressController(IModuleProgressService moduleProgressService) {
         this.moduleProgressService = moduleProgressService;
     }
 

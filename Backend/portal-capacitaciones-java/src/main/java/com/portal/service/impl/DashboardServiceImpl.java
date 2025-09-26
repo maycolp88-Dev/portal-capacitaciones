@@ -1,4 +1,4 @@
-package com.portal.service;
+package com.portal.service.impl;
 
 import com.portal.model.Progress;
 import com.portal.model.Badge;
@@ -7,44 +7,54 @@ import com.portal.repository.ProgressRepository;
 import com.portal.repository.BadgeRepository;
 import com.portal.repository.CourseRepository;
 import com.portal.repository.ModuleRepository;
+import com.portal.service.IDashboardService;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Implementación de {@link IDashboardService}.
+ * Construye estadísticas y resúmenes para el dashboard de usuario.
+ */
 @Service
-public class DashboardService {
+public class DashboardServiceImpl implements IDashboardService {
+
     private final CourseRepository courseRepo;
     private final ProgressRepository progressRepo;
     private final BadgeRepository badgeRepo;
     private final ModuleRepository moduleRepo;
 
-    public DashboardService(CourseRepository courseRepo,
-                            ProgressRepository progressRepo,
-                            BadgeRepository badgeRepo,
-                            ModuleRepository moduleRepo) {
+    public DashboardServiceImpl(CourseRepository courseRepo,
+                                ProgressRepository progressRepo,
+                                BadgeRepository badgeRepo,
+                                ModuleRepository moduleRepo) {
         this.courseRepo = courseRepo;
         this.progressRepo = progressRepo;
         this.badgeRepo = badgeRepo;
         this.moduleRepo = moduleRepo;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Map<String, Object> buildDashboard(Long userId) {
         Map<String, Object> out = new LinkedHashMap<>();
 
         List<Course> courses = courseRepo.findAll();
-        List<Progress> userProgress = progressRepo.findByUserId(userId); // Asegúrate que existe este método
+        List<Progress> userProgress = progressRepo.findByUserId(userId);
 
         long totalCourses = courses.size();
 
-        // coursesStarted = número de courseId distintos en userProgress
+        // Número de cursos iniciados
         Set<Long> started = userProgress.stream()
                 .map(Progress::getCourseId)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
         long coursesStarted = started.size();
 
-        // coursesCompleted = courses que tienen progreso de curso (moduleId == null) con status == "completado"
+        // Número de cursos completados
         long coursesCompleted = userProgress.stream()
                 .filter(p -> p.getModuleId() == null && "completado".equals(p.getStatus()))
                 .map(Progress::getCourseId)
@@ -52,11 +62,11 @@ public class DashboardService {
                 .collect(Collectors.toSet())
                 .size();
 
-        // badges: mapear badges a List<Map<String,Object>>
-        List<Map<String,Object>> badgesOut = new ArrayList<>();
+        // Insignias obtenidas
+        List<Map<String, Object>> badgesOut = new ArrayList<>();
         List<Badge> badges = badgeRepo.findByUserId(userId);
         for (Badge b : badges) {
-            Map<String,Object> m = new LinkedHashMap<>();
+            Map<String, Object> m = new LinkedHashMap<>();
             m.put("id", b.getId());
             m.put("courseId", b.getCourseId());
             String title = courseRepo.findById(b.getCourseId()).map(Course::getTitle).orElse("Curso desconocido");
@@ -65,21 +75,21 @@ public class DashboardService {
             badgesOut.add(m);
         }
 
-        // resumen de cursos (progress por curso)
+        // Resumen de cursos y cálculo de progreso
         int sumPercent = 0;
-        List<Map<String,Object>> courseSummaries = new ArrayList<>();
+        List<Map<String, Object>> courseSummaries = new ArrayList<>();
         for (Course c : courses) {
-            long totalModules = moduleRepo.countByCourseId(c.getId()); // asegúrate que existe countByCourseId
+            long totalModules = moduleRepo.countByCourseId(c.getId());
             long completedModules = userProgress.stream()
                     .filter(p -> Objects.equals(p.getCourseId(), c.getId()) && p.getModuleId() != null && "completado".equals(p.getStatus()))
                     .count();
 
-            int percent = totalModules > 0 ? (int)((completedModules * 100.0) / totalModules) : 0;
+            int percent = totalModules > 0 ? (int) ((completedModules * 100.0) / totalModules) : 0;
             sumPercent += percent;
 
             String status = percent == 100 ? "completado" : (percent > 0 ? "en progreso" : "pendiente");
 
-            Map<String,Object> cm = new LinkedHashMap<>();
+            Map<String, Object> cm = new LinkedHashMap<>();
             cm.put("id", c.getId());
             cm.put("title", c.getTitle());
             cm.put("progress", percent);
@@ -99,4 +109,3 @@ public class DashboardService {
         return out;
     }
 }
-
