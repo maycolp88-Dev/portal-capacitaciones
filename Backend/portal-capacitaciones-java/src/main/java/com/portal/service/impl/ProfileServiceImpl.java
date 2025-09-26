@@ -50,9 +50,6 @@ public class ProfileServiceImpl implements IProfileService {
     public Map<String,Object> getProfile(Long userId) {
         Map<String,Object> out = new LinkedHashMap<>();
 
-        // =====================
-        // Información del usuario
-        // =====================
         User u = userRepo.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
@@ -62,12 +59,8 @@ public class ProfileServiceImpl implements IProfileService {
                 "admin", u.isAdmin()
         ));
 
-        // =====================
-        // Progreso en cursos
-        // =====================
         List<Progress> progresses = progressRepo.findByUserId(userId);
 
-        // Agrupar progresos por curso
         Map<Long, List<Progress>> byCourse = progresses.stream()
                 .collect(Collectors.groupingBy(Progress::getCourseId));
 
@@ -115,9 +108,6 @@ public class ProfileServiceImpl implements IProfileService {
 
         out.put("progress", progressOut);
 
-        // =====================
-        // Insignias (Badges)
-        // =====================
         List<Map<String,Object>> badgesOut = badgeRepo.findByUserId(userId).stream()
                 .map(b -> {
                     Map<String,Object> m = new HashMap<>();

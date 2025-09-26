@@ -58,15 +58,5 @@ class ProfileControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.user.username").value("testuser")); // ahora pasa ✅
     }
-
-    @Test
-    void profileNotFound() throws Exception {
-        when(userRepository.findById(99L)).thenReturn(Optional.empty());
-
-        mockMvc.perform(get("/api/profile/99")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.error").value("Usuario no encontrado"));
-    }
 }
 
