@@ -1,0 +1,62 @@
+<div class="page-wrap">
+  <mat-card class="card form-card">
+    <div class="card-header">
+      <h2>📚 Administrar Cursos</h2>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="msgs">
+      <div *ngIf="success" class="msg success">{{ success }}</div>
+      <div *ngIf="error" class="msg error">{{ error }}</div>
+    </div>
+
+    <form (ngSubmit)="addCourse()" #courseForm="ngForm" class="admin-form" novalidate>
+      <div class="form-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Título</mat-label>
+          <input matInput [(ngModel)]="newCourse.title" name="title" required />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Descripción</mat-label>
+          <input matInput [(ngModel)]="newCourse.description" name="description" required />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Módulo principal</mat-label>
+          <input matInput [(ngModel)]="newCourse.module" name="module" required />
+        </mat-form-field>
+      </div>
+
+      <div class="form-actions">
+        <button mat-flat-button color="primary" type="submit" [disabled]="!courseForm.form.valid">
+          <mat-icon>add</mat-icon>&nbsp;Agregar Curso
+        </button>
+      </div>
+    </form>
+  </mat-card>
+
+  <mat-card class="card list-card">
+    <div class="list-header">
+      <h3>📖 Cursos existentes</h3>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="courses-grid">
+      <mat-card class="course-card" *ngFor="let c of courses">
+        <div class="card-top">
+          <mat-card-title>{{ c.title }}</mat-card-title>
+          <mat-card-subtitle>{{ c.description }}</mat-card-subtitle>
+        </div>
+
+        <div class="course-actions">
+          <button mat-icon-button color="warn" aria-label="Eliminar curso" (click)="deleteCourse(c.id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </mat-card>
+    </div>
+  </mat-card>
+</div>

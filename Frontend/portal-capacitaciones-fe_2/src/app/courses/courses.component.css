@@ -1,0 +1,78 @@
+.courses-container {
+  max-width: 1100px;
+  margin: 30px auto;
+  padding: 0 20px;
+}
+
+.course-header {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+}
+
+.modules-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+  gap: 50px;
+}
+
+.module-card {
+  padding: 16px;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+mat-card-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+mat-card-subtitle {
+  font-size: 13px;
+  color: #666;
+}
+
+mat-card-actions {
+  margin-top: 12px;
+}
+
+.snackbar-success {
+  background: #4caf50;
+  color: #fff;
+  font-weight: 500;
+}
+
+.snackbar-error {
+  background: #f44336;
+  color: #fff;
+  font-weight: 500;
+}
+
+.module-card {
+  flex: 1 1 calc(33% - 16px);
+  min-width: 250px;
+  margin: 8px;
+  padding: 16px;
+  border-radius: 12px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.module-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* 🎨 Colores según estado */
+.module-pending {
+  background: #fff9c4;
+}
+
+.module-progress {
+  background: #bbdefb;
+}
+
+.module-done {
+  background: #c8e6c9;
+}

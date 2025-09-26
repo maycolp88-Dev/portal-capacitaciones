@@ -1,0 +1,43 @@
+<div class="login-wrapper">
+  <mat-card class="login-card">
+    <h2 class="title">Welcome back 👋</h2>
+    <p class="subtitle">Log in to continue your learning journey</p>
+
+    <form [formGroup]="form" (ngSubmit)="login()" class="form">
+      <mat-form-field appearance="outline" class="input-field">
+        <mat-label>Email</mat-label>
+        <input matInput placeholder="name@email.com" formControlName="username" />
+        <mat-icon matSuffix>person</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="input-field">
+        <mat-label>Password</mat-label>
+        <input matInput [type]="'password'" placeholder="Enter your password" formControlName="password" />
+        <mat-icon matSuffix>lock</mat-icon>
+      </mat-form-field>
+
+      <div class="actions">
+        <mat-checkbox formControlName="rememberMe">Remember me</mat-checkbox>
+        <a href="#" class="forgot-link">Forgot password?</a>
+      </div>
+
+      <button mat-raised-button color="primary" class="login-btn" type="submit">
+        Login
+      </button>
+    </form>
+
+    <mat-divider class="divider">or</mat-divider>
+
+    <div class="social-login">
+      <button mat-stroked-button class="social-btn google">Continue with Google</button>
+      <button mat-stroked-button class="social-btn facebook">Continue with Facebook</button>
+      <button mat-stroked-button class="social-btn apple">Continue with Apple</button>
+    </div>
+
+    <p class="signup-text">
+      New here? <a href="#">Sign up</a>
+    </p>
+  </mat-card>
+</div>
+
+

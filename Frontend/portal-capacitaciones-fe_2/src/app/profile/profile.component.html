@@ -1,0 +1,63 @@
+<div *ngIf="loading" class="loading">Cargando perfil...</div>
+<div *ngIf="error" class="error">{{ error }}</div>
+
+<div *ngIf="profile" class="profile-container">
+  <mat-card>
+    <mat-card-header>
+      <div mat-card-avatar class="profile-avatar"></div>
+      <mat-card-title>Perfil de {{ profile.user?.username }}</mat-card-title>
+      <mat-card-subtitle>
+        Rol: {{ profile.user?.admin ? 'Administrador' : 'Estudiante' }}
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-divider></mat-divider>
+
+    <!-- 📊 Estadísticas -->
+    <mat-card-content>
+      <h3>📊 Estadísticas</h3>
+      <p>📚 Cursos inscritos: <strong>{{ enrolledCount }}</strong></p>
+      <p>✅ Completados: <strong>{{ completedCount }}</strong></p>
+      <p>🏅 Insignias: <strong>{{ badgesCount }}</strong></p>
+    </mat-card-content>
+
+    <mat-divider></mat-divider>
+
+    <!-- 📈 Progreso -->
+    <mat-card-content *ngIf="profile.progress?.length">
+      <h3>📈 Progreso</h3>
+      <div *ngFor="let course of profile.progress" class="progress-section">
+        <h4>{{ course.title }} — {{ course.status }}</h4>
+        <mat-progress-bar
+          mode="determinate"
+          [value]="course.progress">
+        </mat-progress-bar>
+
+        <ul>
+          <li *ngFor="let mod of course.modules">
+            {{ mod.title }} —
+            <span [ngClass]="{ 'done': mod.status === 'completado' }">
+              {{ mod.status === 'completado' ? '✅ Completado' : 'Pendiente' }}
+            </span>
+          </li>
+        </ul>
+      </div>
+    </mat-card-content>
+
+    <mat-divider></mat-divider>
+
+    <!-- 🏅 Insignias -->
+    <mat-card-content *ngIf="profile.badges?.length">
+      <h3>🏅 Mis Insignias</h3>
+      <div class="badges">
+        <mat-card *ngFor="let b of profile.badges" class="badge-card">
+          <img mat-card-image [src]="getBadgeIcon(b.courseId)" alt="badge" />
+          <mat-card-content>
+            <p><strong>{{ b.courseTitle }}</strong></p>
+            <small>Otorgada el {{ b.awardedAt | date:'dd/MM/yyyy HH:mm' }}</small>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
