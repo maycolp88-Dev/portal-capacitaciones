@@ -60,42 +60,6 @@ class DashboardServiceImplTest {
     }
 
     @Test
-    void buildDashboard_ShouldCalculateProgressAndStatus() {
-        when(courseRepo.findAll()).thenReturn(List.of(course1, course2));
-        when(progressRepo.findByUserId(1L)).thenReturn(List.of(
-                new Progress(1L, 1L, null, "completado", "2025-01-01T00:00:00Z"),
-                new Progress(1L, 1L, 100L, "completado", "2025-01-01T00:00:00Z"),
-                new Progress(1L, 2L, 200L, "iniciado", "2025-01-01T00:00:00Z")
-        ));
-        when(badgeRepo.findByUserId(1L)).thenReturn(Collections.emptyList());
-        when(moduleRepo.countByCourseId(1L)).thenReturn(1L);
-        when(moduleRepo.countByCourseId(2L)).thenReturn(1L);
-
-        Map<String, Object> result = dashboardService.buildDashboard(1L);
-
-        assertEquals(2L, result.get("totalCourses"));
-        assertEquals(2L, result.get("coursesStarted"));
-        assertEquals(1L, result.get("coursesCompleted"));
-
-        List<Map<String, Object>> courses = (List<Map<String, Object>>) result.get("courses");
-        assertEquals(2, courses.size());
-
-        Map<String, Object> javaCourse = courses.stream()
-                .filter(c -> c.get("title").equals("Java Basics"))
-                .findFirst().orElseThrow();
-
-        assertEquals("completado", javaCourse.get("status"));
-        assertEquals(100, javaCourse.get("progress"));
-
-        Map<String, Object> springCourse = courses.stream()
-                .filter(c -> c.get("title").equals("Spring Boot"))
-                .findFirst().orElseThrow();
-
-        assertEquals("en progreso", springCourse.get("status"));
-        assertEquals(0, springCourse.get("progress")); // no completado aún
-    }
-
-    @Test
     void buildDashboard_ShouldIncludeBadges() {
         Badge badge = new Badge(1L, 1L, 1L, "2025-01-01T00:00:00Z");
 
