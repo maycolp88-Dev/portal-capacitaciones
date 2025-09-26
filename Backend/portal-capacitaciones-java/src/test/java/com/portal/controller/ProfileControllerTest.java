@@ -6,7 +6,7 @@ import com.portal.model.User;
 import com.portal.repository.BadgeRepository;
 import com.portal.repository.ProgressRepository;
 import com.portal.repository.UserRepository;
-import com.portal.service.ProfileService;
+import com.portal.service.IProfileService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -29,7 +29,7 @@ class ProfileControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private ProfileService profileService;
+    private IProfileService profileService;
 
     @MockBean
     private UserRepository userRepository;

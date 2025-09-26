@@ -2,7 +2,7 @@ package com.portal.controller;
 
 import com.portal.DTO.UserDTO;
 import com.portal.repository.UserRepository;
-import com.portal.service.AuthService;
+import com.portal.service.IAuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,10 +11,10 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api")
 public class AuthController {
-    private final AuthService authService;
+    private final IAuthService authService;
     private final UserRepository userRepository;
 
-    public AuthController(AuthService authService, UserRepository userRepository) {
+    public AuthController(IAuthService authService, UserRepository userRepository) {
         this.authService = authService;
         this.userRepository = userRepository;
     }

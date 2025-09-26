@@ -2,7 +2,7 @@ package com.portal.controller;
 
 import com.portal.model.User;
 import com.portal.repository.UserRepository;
-import com.portal.service.AuthService;
+import com.portal.service.IAuthService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -24,7 +24,7 @@ class AuthControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private AuthService authService;
+    private IAuthService authService;
 
     @MockBean
     private UserRepository userRepository;

@@ -1,98 +1,91 @@
 <div class="page-wrap">
-  <mat-card class="card form-card">
-    <div class="card-header">
-      <h2>📚 Administrar Cursos</h2>
-    </div>
-
-    <mat-divider></mat-divider>
-
-    <div class="msgs">
-      <div *ngIf="success" class="msg success">{{ success }}</div>
-      <div *ngIf="error" class="msg error">{{ error }}</div>
-    </div>
-
-    <form (ngSubmit)="addCourse()" #courseForm="ngForm" class="admin-form" novalidate>
-      <div class="form-grid">
-        <mat-form-field appearance="outline">
-          <mat-label>Título</mat-label>
-          <input matInput [(ngModel)]="newCourse.title" name="title" required />
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Descripción</mat-label>
-          <input matInput [(ngModel)]="newCourse.description" name="description" required />
-        </mat-form-field>
-
-      </div>
-
-      <div class="form-actions">
-        <button mat-flat-button color="primary" type="submit" [disabled]="!courseForm.form.valid">
-          <mat-icon>add</mat-icon>&nbsp;Agregar Curso
-        </button>
-      </div>
-    </form>
-  </mat-card>
-
-  <mat-card class="card form-card">
-  <div class="card-header">
-    <h2>➕ Agregar Módulo</h2>
-  </div>
-
-  <mat-divider></mat-divider>
-
-  <form (ngSubmit)="addModule()" #moduleForm="ngForm" class="admin-form" novalidate>
-    <div class="form-grid">
-      <mat-form-field appearance="outline">
-        <mat-label>Curso destino</mat-label>
-        <mat-select [(ngModel)]="selectedCourseId" name="selectedCourse" required>
-          <mat-option *ngFor="let c of courses" [value]="c.id">{{ c.title }}</mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Título módulo</mat-label>
-        <input matInput [(ngModel)]="newModule.title" name="title" required />
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Descripción módulo</mat-label>
-        <input matInput [(ngModel)]="newModule.description" name="description" required />
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Contenido</mat-label>
-        <textarea matInput rows="4" [(ngModel)]="newModule.content" name="content"></textarea>
-      </mat-form-field>
-    </div>
-
-    <div class="form-actions">
-      <button mat-flat-button color="accent" type="submit" [disabled]="!moduleForm.form.valid">
-        <mat-icon>note_add</mat-icon>&nbsp;Agregar Módulo
-      </button>
-    </div>
-  </form>
-  </mat-card>
-
-  <mat-card class="card list-card">
-    <div class="list-header">
-      <h3>📖 Cursos existentes</h3>
-    </div>
-
-    <mat-divider></mat-divider>
-
-    <div class="courses-grid">
-      <mat-card class="course-card" *ngFor="let c of courses">
-        <div class="card-top">
-          <mat-card-title>{{ c.title }}</mat-card-title>
-          <mat-card-subtitle>{{ c.description }}</mat-card-subtitle>
+    <mat-card class="card form-card">
+        <div class="card-header">
+            <h2>📚 Administrar Cursos</h2>
         </div>
-
-        <div class="course-actions">
-          <button mat-icon-button color="warn" aria-label="Eliminar curso" (click)="deleteCourse(c.id)">
-            <mat-icon>delete</mat-icon>
-          </button>
+        <mat-divider></mat-divider>
+        <div class="msgs">
+            <div *ngIf="success" class="msg success">{{ success }}</div>
+            <div *ngIf="error" class="msg error">{{ error }}</div>
         </div>
-      </mat-card>
-    </div>
-  </mat-card>
+        <form (ngSubmit)="addCourse()" #courseForm="ngForm" class="admin-form" novalidate>
+            <div class="form-grid">
+                <mat-form-field appearance="outline">
+                    <mat-label>Título</mat-label>
+                    <input matInput [(ngModel)]="newCourse.title" name="title" required />
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Descripción</mat-label>
+                    <input matInput [(ngModel)]="newCourse.description" name="description" required />
+                </mat-form-field>
+            </div>
+            <div class="form-actions">
+                <button mat-flat-button color="primary" type="submit" [disabled]="!courseForm.form.valid">
+                    <mat-icon>add</mat-icon>&nbsp;Agregar Curso
+                </button>
+            </div>
+        </form>
+    </mat-card>
+
+    <mat-card class="card form-card">
+        <div class="card-header">
+            <h2>➕ Agregar Módulo</h2>
+        </div>
+        <mat-divider></mat-divider>
+        <form (ngSubmit)="addModule()" #moduleForm="ngForm" class="admin-form" novalidate>
+            <div class="form-grid">
+                <mat-form-field appearance="outline">
+                    <mat-label>Curso destino</mat-label>
+                    <mat-select [(ngModel)]="selectedCourseId" name="selectedCourse" required>
+                        <mat-option *ngFor="let c of courses" [value]="c.id">{{ c.title }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Título módulo</mat-label>
+                    <input matInput [(ngModel)]="newModule.title" name="title" required />
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Descripción módulo</mat-label>
+                    <input matInput [(ngModel)]="newModule.description" name="description" required />
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Contenido</mat-label>
+                    <textarea matInput rows="4" [(ngModel)]="newModule.content" name="content"></textarea>
+                </mat-form-field>
+            </div>
+            <div class="form-actions">
+                <button mat-flat-button color="accent" type="submit" [disabled]="!moduleForm.form.valid">
+                    <mat-icon>note_add</mat-icon>&nbsp;Agregar Módulo
+                </button>
+            </div>
+        </form>
+    </mat-card>
+
+    <mat-card class="card list-card">
+        <div class="list-header">
+            <h3>📖 Cursos existentes</h3>
+        </div>
+        <mat-divider></mat-divider>
+        <div class="courses-grid">
+            <mat-card class="course-card" *ngFor="let c of courses">
+                <div class="card-top">
+                    <mat-card-title>{{ c.title }}</mat-card-title>
+                    <mat-card-subtitle>{{ c.description }}</mat-card-subtitle>
+                    </div>
+                <div class="modules-list" *ngIf="c.modules && c.modules.length > 0">
+                    <h4>Módulos:</h4>
+                    <ul>
+                        <ng-container *ngFor="let m of c.modules">
+                            <li class="module-item" *ngIf="m && m.id">
+                                <span>{{ m.title }}</span>
+                                <button mat-icon-button color="warn" aria-label="Eliminar módulo" (click)="deleteModule(c.id, m.id)">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </li>
+                        </ng-container>
+                    </ul>
+                </div>
+            </mat-card>
+        </div>
+    </mat-card>
 </div>

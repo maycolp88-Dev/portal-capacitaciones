@@ -11,6 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatSelectModule } from '@angular/material/select';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-admin',
@@ -28,12 +29,24 @@ import { MatSelectModule } from '@angular/material/select';
     MatSelectModule
   ],
   templateUrl: './admin.component.html',
-  styleUrls: ['./admin.component.css']
+  styleUrls: ['./admin.component.css'],
+  animations: [
+    trigger('moduleAnim', [
+      transition(':leave', [
+        animate('200ms ease-in', style({ 
+          opacity: 0, 
+          height: 0, 
+          margin: 0, 
+          padding: 0 
+        }))
+      ])
+    ])
+  ]
 })
 export class AdminComponent {
   courses: Course[] = [];
   newCourse: Partial<Course> = { title: '', module: '', description: '' };
-  newModule: Partial<Module> = { title: '', description: '', orderIndex: 1, content: '' };
+  newModule: Partial<Module> = { title: '', description: '', content: '' };
   selectedCourseId: number | null = null;
   error = '';
   success = '';
@@ -47,7 +60,13 @@ export class AdminComponent {
     if (!user?.id) return;
 
     this.svc.list(user.id).subscribe({
-      next: (res) => (this.courses = res),
+      next: (res) => {
+        // Normalizamos siempre los módulos y filtramos vacíos
+        this.courses = res.map(c => ({
+          ...c,
+          modules: (c.modules ?? []).filter(m => m && m.id && m.title)
+        }));
+      },
       error: (err) => {
         console.error('Error cargando cursos:', err);
         this.error = 'Error cargando cursos';
@@ -65,9 +84,9 @@ export class AdminComponent {
     }
 
     this.svc.addCourse(this.newCourse as Course).subscribe({
-      next: () => {
+      next: (course) => {
         this.success = '✅ Curso agregado correctamente';
-        this.loadCourses();
+        this.courses.push({ ...course, modules: [] }); // añadimos vacío
         this.resetForm();
       },
       error: (err) => {
@@ -83,7 +102,7 @@ export class AdminComponent {
     this.svc.deleteCourse(id).subscribe({
       next: () => {
         this.success = '✅ Curso eliminado';
-        this.loadCourses();
+        this.courses = this.courses.filter(c => c.id !== id);
       },
       error: (err) => {
         console.error(err);
@@ -111,9 +130,13 @@ export class AdminComponent {
     }
 
     this.svc.addModule(this.selectedCourseId, this.newModule).subscribe({
-      next: () => {
+      next: (m) => {
+        const course = this.courses.find(c => c.id === this.selectedCourseId);
+        if (course) {
+          if (!course.modules) course.modules = [];
+          course.modules.push(m);
+        }
         this.success = '✅ Módulo agregado correctamente';
-        this.loadCourses();
         this.resetModuleForm();
       },
       error: (err) => {
@@ -123,8 +146,26 @@ export class AdminComponent {
     });
   }
 
+  deleteModule(courseId: number, moduleId: number) {
+    if (!confirm('¿Seguro de eliminar este módulo?')) return;
+
+    this.svc.deleteModule(courseId, moduleId).subscribe({
+      next: () => {
+        const course = this.courses.find(c => c.id === courseId);
+        if (course) {
+          course.modules = course.modules?.filter(m => m.id !== moduleId) ?? [];
+        }
+        this.success = '✅ Módulo eliminado';
+      },
+      error: (err) => {
+        console.error(err);
+        this.error = '❌ Error eliminando módulo';
+      }
+    });
+  }
+
   private resetModuleForm() {
-    this.newModule = { title: '', description: '', orderIndex: 1, content: '' };
+    this.newModule = { title: '', description: '', content: '' };
     this.selectedCourseId = null;
   }
 }

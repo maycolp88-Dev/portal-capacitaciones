@@ -1,7 +1,7 @@
 package com.portal.controller;
 
 import com.portal.model.Course;
-import com.portal.service.CourseService;
+import com.portal.service.ICourseService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -26,7 +26,7 @@ class CourseControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private CourseService courseService;
+    private ICourseService courseService;
 
     @Test
     void listCourses() throws Exception {

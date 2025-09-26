@@ -75,5 +75,11 @@ export class CoursesService {
       module
     );
   }
+
+  deleteModule(courseId: number, moduleId: number): Observable<void> {
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  return this.http.delete<void>(`/api/admin/courses/${courseId}/modules/${moduleId}?userId=${user.id}`);
+  }
+
 }
 

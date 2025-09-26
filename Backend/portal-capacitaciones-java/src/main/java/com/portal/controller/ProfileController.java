@@ -1,6 +1,6 @@
 package com.portal.controller;
 
-import com.portal.service.ProfileService;
+import com.portal.service.IProfileService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,8 +9,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api")
 public class ProfileController {
-    private final ProfileService profileService;
-    public ProfileController(ProfileService profileService) {
+    private final IProfileService profileService;
+    public ProfileController(IProfileService profileService) {
         this.profileService = profileService;
     }
 

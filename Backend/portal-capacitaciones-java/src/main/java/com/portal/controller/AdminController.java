@@ -2,8 +2,8 @@ package com.portal.controller;
 
 import com.portal.model.Course;
 import com.portal.repository.ModuleRepository;
-import com.portal.service.CourseService;
-import com.portal.service.UserService;
+import com.portal.service.ICourseService;
+import com.portal.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +17,10 @@ import java.util.Map;
 public class AdminController {
 
     @Autowired
-    private CourseService courseService;
+    private ICourseService courseService;
 
     @Autowired
-    private UserService userService;
+    private IUserService userService;
 
     @Autowired
     private ModuleRepository moduleRepo;

@@ -3,7 +3,7 @@ package com.portal.controller;
 import com.portal.model.Module;
 import com.portal.model.Progress;
 import com.portal.DTO.CourseDTO;
-import com.portal.service.CourseService;
+import com.portal.service.ICourseService;
 import com.portal.repository.ModuleRepository;
 import com.portal.repository.ProgressRepository;
 
@@ -18,11 +18,11 @@ import java.util.List;
 @RequestMapping("/api")
 public class CourseController {
 
-    private final CourseService courseService;
+    private final ICourseService courseService;
     private final ModuleRepository moduleRepo;
     private final ProgressRepository progressRepo;
 
-    public CourseController(CourseService courseService,
+    public CourseController(ICourseService courseService,
                             ModuleRepository moduleRepo,
                             ProgressRepository progressRepo) {
         this.courseService = courseService;
