@@ -165,6 +165,14 @@ public class CourseService {
         return moduleProgress;
     }
 
+    public Module addModule(Long courseId, Module module) {
+        Course course = courseRepo.findById(courseId)
+                .orElseThrow(() -> new RuntimeException("Curso no encontrado con id " + courseId));
+        module.setCourse(course);
+        return moduleRepo.save(module);
+    }
+
+
     // ========================
     // CRUD CURSOS
     // ========================

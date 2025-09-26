@@ -126,4 +126,12 @@ public class CourseController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", ex.getMessage()));
         }
     }
+
+    @GetMapping("/courses/{id}")
+    public ResponseEntity<?> getCourseById(@PathVariable Long id) {
+        return courseService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
 }

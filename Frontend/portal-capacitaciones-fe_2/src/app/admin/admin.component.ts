@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { CoursesService, Course } from '../courses/courses.service';
+import { CoursesService, Course, Module } from '../courses/courses.service';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -10,6 +10,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-admin',
@@ -23,7 +24,8 @@ import { MatGridListModule } from '@angular/material/grid-list';
     MatCardModule,
     MatIconModule,
     MatDividerModule,
-    MatGridListModule
+    MatGridListModule,
+    MatSelectModule
   ],
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.css']
@@ -31,6 +33,8 @@ import { MatGridListModule } from '@angular/material/grid-list';
 export class AdminComponent {
   courses: Course[] = [];
   newCourse: Partial<Course> = { title: '', module: '', description: '' };
+  newModule: Partial<Module> = { title: '', description: '', orderIndex: 1, content: '' };
+  selectedCourseId: number | null = null;
   error = '';
   success = '';
 
@@ -90,5 +94,37 @@ export class AdminComponent {
 
   private resetForm() {
     this.newCourse = { title: '', module: '', description: '' };
+  }
+
+  addModule() {
+    this.success = '';
+    this.error = '';
+
+    if (!this.selectedCourseId) {
+      this.error = '❌ Selecciona un curso';
+      return;
+    }
+
+    if (!this.newModule.title || !this.newModule.description) {
+      this.error = '❌ Título y descripción del módulo requeridos';
+      return;
+    }
+
+    this.svc.addModule(this.selectedCourseId, this.newModule).subscribe({
+      next: () => {
+        this.success = '✅ Módulo agregado correctamente';
+        this.loadCourses();
+        this.resetModuleForm();
+      },
+      error: (err) => {
+        console.error(err);
+        this.error = '❌ Error agregando módulo';
+      }
+    });
+  }
+
+  private resetModuleForm() {
+    this.newModule = { title: '', description: '', orderIndex: 1, content: '' };
+    this.selectedCourseId = null;
   }
 }
