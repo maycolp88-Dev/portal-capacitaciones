@@ -1,0 +1,47 @@
+<div class="courses-container" *ngIf="!loading && !error">
+  <mat-accordion multi>
+    <mat-expansion-panel *ngFor="let course of courses">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          🎓 {{ course.title }}
+        </mat-panel-title>
+        <mat-panel-description>
+          {{ course.description || 'Curso' }} — {{ course.modules?.length || 0 }} módulos
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <div class="course-header">
+        <button mat-stroked-button color="primary" (click)="startCourse(course.id!)">
+          🚀 Iniciar curso
+        </button>
+      </div>
+
+      <div class="modules-grid">
+        <mat-card
+          class="module-card"
+          *ngFor="let mod of course.modules; let i = index"
+          [ngClass]="{
+            'module-pending': mod.status === 'pending',
+            'module-progress': mod.status === 'in-progress',
+            'module-done': mod.status === 'completed'
+          }">
+          <mat-card-title>{{ mod.title }}</mat-card-title>
+          <mat-card-subtitle>Módulo {{ mod.orderIndex }}</mat-card-subtitle>
+          <mat-card-actions>
+            <button
+              mat-raised-button
+              color="accent"
+              (click)="goToModule(mod.id); $event.stopPropagation()"
+            >
+              Ver módulo
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>
+
+<div *ngIf="loading" class="loading">Cargando cursos...</div>
+<div *ngIf="error" class="error">{{ error }}</div>
+

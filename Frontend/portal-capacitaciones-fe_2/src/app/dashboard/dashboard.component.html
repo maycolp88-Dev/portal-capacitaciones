@@ -1,0 +1,55 @@
+<div class="dashboard-container" *ngIf="!loading && !error">
+  <!-- Estadísticas -->
+  <mat-card class="stats-card">
+    <h2>📊 Estadísticas</h2>
+    <div class="stats-grid">
+      <div>📚 Total cursos: {{ dashboard.totalCourses }}</div>
+      <div>▶️ Iniciados: {{ dashboard.coursesStarted }}</div>
+      <div>✅ Completados: {{ dashboard.coursesCompleted }}</div>
+      <div>🏅 Insignias: {{ dashboard.badges?.length || 0 }}</div>
+    </div>
+    <div class="progress">
+      Promedio avance:
+      <mat-progress-bar
+        mode="determinate"
+        [value]="dashboard.avgProgress"
+      ></mat-progress-bar>
+      <span>{{ dashboard.avgProgress }}%</span>
+    </div>
+  </mat-card>
+
+  <!-- Mis cursos -->
+  <mat-card class="courses-card">
+    <h2>🎓 Mis cursos</h2>
+    <ul class="custom-list">
+      <li *ngFor="let course of dashboard.courses">
+        <span>{{ course.title }}</span>
+        <span class="estado">{{ course.status }}</span>
+      </li>
+    </ul>
+  </mat-card>
+
+  <!-- Insignias -->
+  <mat-card class="badges-card">
+    <h2>🏅 Insignias</h2>
+    <ul class="custom-list" *ngIf="dashboard.badges?.length > 0; else noBadges">
+      <li *ngFor="let badge of dashboard.badges">
+        <span>{{ badge.courseTitle }}</span>
+        <span class="fecha">
+          Otorgada el {{ badge.awardedAt | date: 'dd/MM/yyyy HH:mm' }}
+        </span>
+      </li>
+    </ul>
+    <ng-template #noBadges>
+      <p class="estado">No hay insignias aún.</p>
+    </ng-template>
+  </mat-card>
+</div>
+
+<!-- Loading & Error -->
+<div *ngIf="loading" class="loading">Cargando...</div>
+<div *ngIf="error" class="error">{{ error }}</div>
+
+
+
+

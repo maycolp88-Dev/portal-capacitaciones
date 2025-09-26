@@ -1,0 +1,65 @@
+.profile-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+mat-card {
+  width: 80%;
+  max-width: 900px;
+  padding: 1rem;
+  border-radius: 12px;
+  background-color: #fafafa;
+}
+
+mat-card-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+mat-card-content {
+  margin-top: 1rem;
+}
+
+.progress-section {
+  margin-bottom: 1.5rem;
+}
+
+.progress-section h4 {
+  margin: 0.5rem 0;
+}
+
+ul {
+  margin: 0.5rem 0 0 1rem;
+  padding: 0;
+  list-style-type: disc;
+}
+
+ul li {
+  margin: 0.3rem 0;
+}
+
+.done {
+  color: green;
+  font-weight: 600;
+}
+
+.badges {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.badge-card {
+  text-align: center;
+  padding: 0.5rem;
+  border-radius: 8px;
+}
+
+.badge-card img {
+  max-width: 80px;
+  margin: auto;
+  display: block;
+}
+
