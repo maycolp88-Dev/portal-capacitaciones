@@ -47,14 +47,12 @@ public class DashboardServiceImpl implements IDashboardService {
 
         long totalCourses = courses.size();
 
-        // Número de cursos iniciados
         Set<Long> started = userProgress.stream()
                 .map(Progress::getCourseId)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
         long coursesStarted = started.size();
 
-        // Número de cursos completados
         long coursesCompleted = userProgress.stream()
                 .filter(p -> p.getModuleId() == null && "completado".equals(p.getStatus()))
                 .map(Progress::getCourseId)
@@ -62,7 +60,6 @@ public class DashboardServiceImpl implements IDashboardService {
                 .collect(Collectors.toSet())
                 .size();
 
-        // Insignias obtenidas
         List<Map<String, Object>> badgesOut = new ArrayList<>();
         List<Badge> badges = badgeRepo.findByUserId(userId);
         for (Badge b : badges) {
@@ -75,7 +72,6 @@ public class DashboardServiceImpl implements IDashboardService {
             badgesOut.add(m);
         }
 
-        // Resumen de cursos y cálculo de progreso
         int sumPercent = 0;
         List<Map<String, Object>> courseSummaries = new ArrayList<>();
         for (Course c : courses) {

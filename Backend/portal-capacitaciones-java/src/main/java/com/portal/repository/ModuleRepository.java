@@ -7,6 +7,5 @@ import java.util.List;
 
 public interface ModuleRepository extends JpaRepository<Module, Long> {
     List<Module> findByCourseIdOrderByOrderIndex(Long courseId);
-    List<Module> findByCourseId(Long courseId);
     long countByCourseId(Long courseId);
 }

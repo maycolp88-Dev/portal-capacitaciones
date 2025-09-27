@@ -6,5 +6,4 @@ import java.util.List;
 
 public interface BadgeRepository extends JpaRepository<Badge, Long> {
     List<Badge> findByUserId(Long userId);
-    long countByUserId(Long userId);
 }

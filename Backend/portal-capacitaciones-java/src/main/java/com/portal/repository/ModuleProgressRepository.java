@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ModuleProgressRepository extends JpaRepository<ModuleProgress, Long> {
-    List<ModuleProgress> findByUserId(Long userId);
     List<ModuleProgress> findByUserIdAndModuleCourseId(Long userId, Long courseId);
     Optional<ModuleProgress> findByUserIdAndModule(Long userId, Module module);
 }

@@ -111,7 +111,6 @@ public class CourseController {
         try {
             Progress p = courseService.completeModule(courseId, moduleId, userId);
 
-            // calcular % (opcional, útil para frontend)
             long total = moduleRepo.countByCourseId(courseId);
             long completed = progressRepo.findByUserIdAndCourseId(userId, courseId).stream()
                     .filter(pr -> pr.getModuleId() != null && "completado".equals(pr.getStatus()))
