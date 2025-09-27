@@ -45,7 +45,6 @@ public class CourseServiceImpl implements ICourseService {
         for (Course c : courses) {
             List<Module> modules = moduleRepo.findByCourseIdOrderByOrderIndex(c.getId());
 
-            // convertir módulos a DTO con estado
             List<ModuleDTO> moduleDtos = new ArrayList<>();
             for (Module m : modules) {
                 String status = progressRepo.findByUserIdAndCourseIdAndModuleId(userId, c.getId(), m.getId())
@@ -61,12 +60,10 @@ public class CourseServiceImpl implements ICourseService {
                 ));
             }
 
-            // calcular % curso
             long total = modules.size();
             long completed = moduleDtos.stream().filter(md -> "completado".equals(md.getStatus())).count();
             int percent = (total > 0) ? (int) ((completed * 100.0) / total) : 0;
 
-            // estado del curso
             String courseStatus = (completed == total && total > 0) ? "completado"
                     : (completed > 0 ? "en progreso" : "iniciado");
 

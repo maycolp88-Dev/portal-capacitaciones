@@ -39,7 +39,6 @@ class ModuleProgressServiceImplTest {
         module.setId(10L);
         module.setTitle("Spring Boot Controllers");
 
-        // Asociamos el curso al módulo
         var course = new com.portal.model.Course();
         course.setId(1L);
         course.setTitle("Java APIs");
