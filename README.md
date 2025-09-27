@@ -56,7 +56,7 @@ portal-capacitaciones/
 - Java 17
 - Spring Boot 3
 - Spring Data JPA / Hibernate
-- H2 / PostgreSQL
+- H2
 - Maven
 
 ### Frontend
