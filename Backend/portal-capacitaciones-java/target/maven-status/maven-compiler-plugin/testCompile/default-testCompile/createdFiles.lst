@@ -1,7 +1,0 @@
-com/portal/controller/AuthControllerTest.class
-com/portal/service/impl/AuthServiceImplTest.class
-com/portal/service/impl/DashboardServiceImplTest.class
-com/portal/service/impl/ModuleProgressServiceImplTest.class
-com/portal/controller/ProfileControllerTest.class
-com/portal/controller/CourseControllerTest.class
-com/portal/service/impl/CourseServiceImplTest.class
