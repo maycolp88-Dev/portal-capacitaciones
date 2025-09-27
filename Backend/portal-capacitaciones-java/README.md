@@ -28,6 +28,3 @@ Ejecutar:
 ```bash
 mvn test
 ```
-
-## Docker (opcional)
-Puedes crear un Dockerfile y docker-compose para integrar con el frontend. Si quieres, lo genero también.
