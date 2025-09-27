@@ -11,7 +11,7 @@ Proyecto generado para la Kata: Portal de Capacitaciones Interactivo.
    ```bash
    mvn spring-boot:run
    ```
-   El backend quedará en http://localhost:8090
+   El backend quedará en http://localhost:9090
 
 2. Endpoints principales:
    - POST /api/login  {username, password}
